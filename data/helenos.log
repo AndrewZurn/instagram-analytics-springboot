@@ -1,0 +1,21 @@
+/*C1*/SET SCHEMA SYSTEM_LOBS
+INSERT INTO BLOCKS VALUES(0,2147483647,0)
+COMMIT
+/*C2*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C3*/SET SCHEMA PUBLIC
+create table ACCOUNT (USERNAME varchar(255) not null, enabled bit not null, PASSWORD varchar(255) not null, primary key (USERNAME))
+create table Authority (id bigint not null, authority varchar(16) not null, ACCOUNT_ID varchar(255), primary key (id))
+create table CLUSTER_CONFIGURATION (id bigint not null, ACTIVE bit not null, ALIAS varchar(32) not null, CLUSTERNAME varchar(32) not null, PASSWORD varchar(64), USERNAME varchar(32), HOSTS varchar(32) not null, primary key (id), unique (ALIAS))
+alter table Authority add constraint FKCF662723ABBC87A7 foreign key (ACCOUNT_ID) references ACCOUNT
+create sequence hibernate_sequence
+INSERT INTO ACCOUNT VALUES('admin','1','a4a88c0872bf652bb9ed803ece5fd6e82354838a9bf59ab4babb1dab322154e1')
+INSERT INTO AUTHORITY VALUES(1,'ROLE_ADMIN',NULL)
+DELETE FROM AUTHORITY WHERE ID=1
+INSERT INTO AUTHORITY VALUES(1,'ROLE_ADMIN','admin')
+COMMIT
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 1
+INSERT INTO CLUSTER_CONFIGURATION VALUES(10,'1','default','TestCluster',NULL,NULL,'localhost:9160')
+COMMIT
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 2
+DISCONNECT
