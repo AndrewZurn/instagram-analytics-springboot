@@ -10,6 +10,4 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * Created by andrew on 8/10/15.
  */
-public interface SourceUserRepository extends CrudRepository<SourceUser, Integer> {
-
-}
+public interface SourceUserRepository extends CrudRepository<SourceUser, Integer> { }

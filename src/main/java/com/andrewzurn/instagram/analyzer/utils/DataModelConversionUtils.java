@@ -1,5 +1,7 @@
 package com.andrewzurn.instagram.analyzer.utils;
 
+import com.andrewzurn.instagram.analyzer.exception.DataModelConverterException;
+import com.andrewzurn.instagram.analyzer.exception.InstagramApiException;
 import com.andrewzurn.instagram.analyzer.model.RawUserMedia;
 import com.andrewzurn.instagram.analyzer.model.SourceUser;
 import com.andrewzurn.instagram.analyzer.service.InstagramService;
@@ -7,6 +9,8 @@ import com.andrewzurn.instagram.analyzer.tasks.InstagramMinerTask;
 import com.sola.instagram.model.Media;
 import com.sola.instagram.model.User;
 import com.sola.instagram.util.PaginatedCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -21,29 +25,33 @@ import java.util.stream.Collectors;
 @Component
 public class DataModelConversionUtils {
 
+  private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
   @Inject
   private InstagramService instagramService;
   @Inject
   private AnalyticsUtils analyticsUtils;
 
-  public List<RawUserMedia> createRawUserMedia(PaginatedCollection<Media> userRecentMedia) {
+  public List<RawUserMedia> createRawUserMedia(PaginatedCollection<Media> userRecentMedia)
+      throws DataModelConverterException {
     List<RawUserMedia> userMedias = null;
     try {
       userMedias = this.convertRawUserMedia(userRecentMedia);
     } catch (Exception e) {
-      System.out.println("ERROR while converting the raw user media objects.\n" + e);
-      e.printStackTrace();
+      throw new DataModelConverterException(
+          String.format("could not convert the user media to %s.",
+              userMedias.getClass().getCanonicalName().toString()));
     }
     return userMedias;
   }
 
-  public SourceUser createSourceUser(User user, List<RawUserMedia> userMedias) {
+  public SourceUser createSourceUser(User user, List<RawUserMedia> userMedias) throws DataModelConverterException {
     SourceUser sourceUser = null;
     try {
       sourceUser = this.convertToSourceUser(user, userMedias);
     } catch (Exception e) {
-      System.out.println("ERROR while converting the source user object.\n" + e);
-      e.printStackTrace();
+      throw new DataModelConverterException(
+          String.format("could not convert the user media to %s.", user.getClass().getCanonicalName().toString()));
     }
     return sourceUser;
   }
@@ -69,7 +77,8 @@ public class DataModelConversionUtils {
       mostRecentMediaEngagementRating = analyticsUtils
           .averagedEngagementRating(userRecentMedia.subList(0, 1), user.getFollowerCount());
     } catch (Exception e) {
-      throw new Exception("ERROR while creating the engagement ratings.\n" + e);
+      // this was more than likely caused by calling the getFollowerCount() method
+      throw new InstagramApiException("ERROR while creating the engagement ratings.\n" + e);
     }
 
     // gather the impression and trending info for user

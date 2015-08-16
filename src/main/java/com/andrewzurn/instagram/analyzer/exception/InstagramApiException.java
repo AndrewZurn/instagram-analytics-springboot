@@ -13,4 +13,15 @@ public class InstagramApiException extends Exception {
     super(message, throwable);
   }
 
+  public InstagramApiException() {
+    super();
+  }
+
+  public InstagramApiException(Throwable cause) {
+    super(cause);
+  }
+
+  protected InstagramApiException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 }
