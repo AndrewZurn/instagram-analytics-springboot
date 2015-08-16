@@ -20,6 +20,17 @@ public class InstagramController {
   @Inject
   private InstagramService instagramService;
 
+  @RequestMapping(method = RequestMethod.GET)
+  public String startMining() throws InstagramException, IOException {
+    if ( !instagramService.isReady()) {
+      String authUrl = this.instagramService.startSignon();
+      return "Please open on the following link to finish signon:<br/>\n" +
+          "<a href='"+ authUrl + "'>Start Instagram Mining</a>";
+    } else {
+      return "Mining already in progress";
+    }
+  }
+
   @RequestMapping(value = "/callback", method = RequestMethod.GET)
   public String callback(@RequestParam(value = "code") String urlCode) throws Exception {
     this.instagramService.finishSignon(urlCode);

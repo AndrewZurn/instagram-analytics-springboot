@@ -18,7 +18,7 @@ import java.util.List;
 public class SourceUser {
 
   @PrimaryKey("user_id")
-  private int userId;
+  private Integer userId;
 
   @Indexed
   @Column("username")
@@ -159,6 +159,14 @@ public class SourceUser {
 
   public Date getUpdatedTime() {
     return updatedTime;
+  }
+
+  public void setCreatedTime(Date createdTime) {
+    this.createdTime = createdTime;
+}
+
+  public void setUpdatedTime(Date updatedTime) {
+    this.updatedTime = updatedTime;
   }
 
   @Override

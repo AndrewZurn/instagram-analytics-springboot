@@ -16,9 +16,14 @@ public class UserController {
   @Inject
   private CassandraService cassandraService;
 
-  @RequestMapping(name = "/", method = RequestMethod.GET)
+  @RequestMapping(value = "/", method = RequestMethod.GET)
   public Iterable<SourceUser> all() {
-    return cassandraService.getUsers();
+    return this.cassandraService.getUsers();
+  }
+
+  @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+  public SourceUser findByUserId(@PathVariable int userId) {
+    return this.cassandraService.findByUserId(userId);
   }
 
 }

@@ -3,6 +3,8 @@ package com.andrewzurn.instagram.analyzer.utils;
 import com.andrewzurn.instagram.analyzer.model.RawUserMedia;
 import com.andrewzurn.instagram.analyzer.service.InstagramService;
 import com.sola.instagram.model.Media;
+import com.sola.instagram.model.User;
+import me.champeau.ld.UberLanguageDetector;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -50,5 +52,29 @@ public class AnalyticsUtils {
     float previousAveragedImpression =
         averageImpressions(userRecentMedia.subList(userRecentMedia.size() / 2, userRecentMedia.size()));
     return (mostRecentAveragedImpression - previousAveragedImpression) / mostRecentAveragedImpression;
+  }
+
+  /*
+     * Try to examine the medias caption, as it might contain the longest readable text, to
+     * determine if it is english.  If an error occurs (NPE while getting the Caption text,
+     * try to look at the user's bio to determine if we are dealing with an english speaking
+     * user.
+     */
+  public boolean determineLanguage(User user, Media userRecentMedia) {
+    UberLanguageDetector detector = UberLanguageDetector.getInstance();
+    try {
+      if ( !"en".equals(detector.detectLang(userRecentMedia.getCaption().getText()))) {
+        return false;
+      }
+    } catch (Exception e) {
+      try {
+        if ( !"en".equals(detector.detectLang(user.getBio()))) {
+          return false;
+        }
+      } catch (Exception e2) {
+        return false;
+      }
+    }
+    return true;
   }
 }
