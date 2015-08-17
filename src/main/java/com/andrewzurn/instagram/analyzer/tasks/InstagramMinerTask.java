@@ -26,6 +26,7 @@ import java.util.List;
 @Component
 public class InstagramMinerTask {
 
+  public static final int FIFTY_THOUSAND = 50000;
   private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
   @Inject
@@ -38,11 +39,19 @@ public class InstagramMinerTask {
   private DataModelConversionUtils dataModelConversionUtils;
 
   private static final int ONE_HALF_MINUTE = 90000;
+  private static final int ONE_AND_ONE_QUARTER_MINUTE = 75000;
 
-  @Scheduled(fixedRate = ONE_HALF_MINUTE)
+  //@Scheduled(fixedRate = ONE_HALF_MINUTE)
   public void minePopularMedia() throws DataModelConverterException, InstagramApiException {
     if ( this.instagramService.isReady()) {
       handlePopularMining();
+    }
+  }
+
+  @Scheduled(fixedRate = ONE_AND_ONE_QUARTER_MINUTE)
+  public void mineUserFollows() throws DataModelConverterException, InstagramApiException {
+    if ( this.instagramService.isReady()) {
+      handleFollowsForUsers();
     }
   }
 
@@ -86,9 +95,60 @@ public class InstagramMinerTask {
     }
   }
 
-  private void handleFollowsForUsers() {
-    this.cassandraService.getUsers();
+  private void handleFollowsForUsers() throws DataModelConverterException, InstagramApiException {
+    SourceUser sourceUser = this.cassandraService.findSingleUntraversedFollowsUser();
+    PaginatedCollection<User> followsUser = null;
+    try {
+      followsUser = this.instagramService.getFollowsForUser(sourceUser.getUserId());
+    } catch (InstagramApiException e) {
+      LOGGER.error("{}", e);
+      throw e;
+    }
 
+    // only traverse the first page of users
+    for(int i = 0; i < followsUser.size(); i++) {
+      User followUser;
+      PaginatedCollection<Media> userRecentMedia;
+      try {
+        followUser = this.instagramService.getInstagramUserById(followsUser.get(i).getId());
+        userRecentMedia = this.instagramService.getInstagramUserMedias(followUser.getId());
+      } catch (InstagramApiException e) {
+        LOGGER.error("{}", e);
+        continue;
+      }
+
+      // if user/media is not detected as english, or we already have this user
+      if ( !analyticsUtils.determineLanguage(followUser, userRecentMedia.get(0))) {
+        LOGGER.info("User: {} with id: {} disqualified for language detection.",
+            followUser.getUserName(), followUser.getId());
+        continue;
+      } else try {
+        if ( followUser.getFollowerCount() < FIFTY_THOUSAND) {
+          LOGGER.info("User: {} with id: {} disqualified for low follower count.",
+              followUser.getUserName(), followUser.getId());
+          continue;
+        }
+      } catch (Exception e) {
+        LOGGER.error("{}", e);
+        continue;
+      }
+
+      // convert them to cassandra models and save/update
+      List<RawUserMedia> userMedias = null;
+      try {
+        userMedias = dataModelConversionUtils.createRawUserMedia(userRecentMedia);
+        handleUserPersistance(followUser, userMedias);
+      } catch (DataModelConverterException e) {
+        LOGGER.error("{}", e);
+        continue;
+      }
+    }
+    // mark that we've traversed this user and gathered users they follow
+    sourceUser.setHasBeenFollowsTraversed(true);
+    sourceUser.setLastFollowsTraversalTime(new Date());
+    this.cassandraService.saveUser(sourceUser);
+    LOGGER.info("Updated user: {} with id {} marking they have been traversed for followers",
+        sourceUser.getUserId(), sourceUser.getUserId());
   }
 
   private SourceUser handleUserPersistance(User user, List<RawUserMedia> userMedias) throws DataModelConverterException {

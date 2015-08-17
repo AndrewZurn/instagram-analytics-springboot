@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
 
@@ -24,9 +23,6 @@ import java.util.List;
 @Service
 @Configuration
 public class InstagramService {
-
-  @Inject
-  private CassandraService cassandraService;
 
   private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -96,7 +92,7 @@ public class InstagramService {
     return userRecentMedia;
   }
 
-  public void getFollowsForUser(int userId) throws InstagramApiException {
+  public PaginatedCollection<User> getFollowsForUser(int userId) throws InstagramApiException {
     PaginatedCollection<User> followsForUser = null;
     try {
       followsForUser = this.instagramSession.getFollows(userId);
@@ -104,5 +100,6 @@ public class InstagramService {
       throw new InstagramApiException("ERROR while retrieving the follow users for user_id: "
           + userId + "\n." + e);
     }
+    return followsForUser;
   }
 }

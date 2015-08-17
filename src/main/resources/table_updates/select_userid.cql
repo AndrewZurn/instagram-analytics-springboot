@@ -1,0 +1,1 @@
+select user_id from instagram_prototype_raw.source_user_entity;

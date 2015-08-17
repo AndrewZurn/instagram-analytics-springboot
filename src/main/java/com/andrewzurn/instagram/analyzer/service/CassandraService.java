@@ -4,13 +4,10 @@ import com.andrewzurn.instagram.analyzer.model.RawUserMedia;
 import com.andrewzurn.instagram.analyzer.model.SourceUser;
 import com.andrewzurn.instagram.analyzer.repository.RawUserMediaRepository;
 import com.andrewzurn.instagram.analyzer.repository.SourceUserRepository;
-import org.springframework.data.cassandra.repository.MapId;
-import org.springframework.data.cassandra.repository.support.BasicMapId;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created by andrew on 8/10/15.
@@ -30,6 +27,14 @@ public class CassandraService {
 
   public SourceUser findByUserId(int userId) {
     return this.sourceUserRepository.findOne(userId);
+  }
+
+  public List<SourceUser> findByTraversedUserFollows(boolean hasBeenTraversed) {
+    return this.sourceUserRepository.findByHasBeenFollowsTraversed(hasBeenTraversed);
+  }
+
+  public SourceUser findSingleUntraversedFollowsUser() {
+    return this.sourceUserRepository.findSingleUntraversedFollowsUser();
   }
 
   public boolean userExists(int userId) {

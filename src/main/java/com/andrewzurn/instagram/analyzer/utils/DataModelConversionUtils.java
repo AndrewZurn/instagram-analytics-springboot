@@ -38,9 +38,7 @@ public class DataModelConversionUtils {
     try {
       userMedias = this.convertRawUserMedia(userRecentMedia);
     } catch (Exception e) {
-      throw new DataModelConverterException(
-          String.format("could not convert the user media to %s.",
-              userMedias.getClass().getCanonicalName().toString()));
+      throw new DataModelConverterException("could not convert raw user media: ", e);
     }
     return userMedias;
   }

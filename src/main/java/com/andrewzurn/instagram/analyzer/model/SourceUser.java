@@ -6,7 +6,6 @@ import org.springframework.data.cassandra.mapping.Indexed;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
-import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,6 +72,7 @@ public class SourceUser {
   @Column("updated_time")
   private Date updatedTime;
 
+  @Indexed
   @Column("has_been_follows_traversed")
   private boolean hasBeenFollowsTraversed;
 

@@ -1,0 +1,3 @@
+use instagram_prototype_raw;
+alter table source_user_entity add has_been_follows_traversed boolean;
+alter table source_user_entity add last_follows_traversal_time timestamp;

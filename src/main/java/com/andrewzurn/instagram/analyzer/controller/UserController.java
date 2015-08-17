@@ -5,6 +5,9 @@ import com.andrewzurn.instagram.analyzer.service.CassandraService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.xml.transform.Source;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by andrew on 8/10/15.
@@ -24,6 +27,16 @@ public class UserController {
   @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
   public SourceUser findByUserId(@PathVariable int userId) {
     return this.cassandraService.findByUserId(userId);
+  }
+
+  @RequestMapping(value = "/traversed/{hasBeenTraversed}", method = RequestMethod.GET)
+  public List<SourceUser> findByTraversedUserFollows(@PathVariable boolean hasBeenTraversed) {
+    return this.cassandraService.findByTraversedUserFollows(hasBeenTraversed);
+  }
+
+  @RequestMapping(value = "/traversed/single", method = RequestMethod.GET)
+  public SourceUser findSingleUntraversedUser() {
+    return this.cassandraService.findSingleUntraversedFollowsUser();
   }
 
 }
