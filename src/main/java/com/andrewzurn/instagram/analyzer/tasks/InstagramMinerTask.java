@@ -60,7 +60,7 @@ public class InstagramMinerTask {
     try {
       popularMedia = this.instagramService.getInstagramPopularMedia();
     } catch (InstagramApiException e) {
-      LOGGER.error("Issue while retrieving the instagram popular media: {}", e);
+      LOGGER.error("Issue while retrieving the instagram popular media: {}", e.getLocalizedMessage(), e);
       throw e;
     }
 
@@ -72,7 +72,7 @@ public class InstagramMinerTask {
         user = instagramService.getInstagramUserById(media.getUser().getId());
         userRecentMedia = this.instagramService.getInstagramUserMedias(user.getId());
       } catch (InstagramApiException e) {
-        LOGGER.error("{}", e);
+        LOGGER.error("{}", e.getLocalizedMessage(), e);
         throw e;
       }
 
@@ -89,7 +89,7 @@ public class InstagramMinerTask {
         userMedias = dataModelConversionUtils.createRawUserMedia(userRecentMedia);
         handleUserPersistance(user, userMedias);
       } catch (DataModelConverterException e) {
-        LOGGER.error("{}", e);
+        LOGGER.error("{}", e.getLocalizedMessage(), e);
         throw e;
       }
     }
@@ -101,7 +101,7 @@ public class InstagramMinerTask {
     try {
       followsUser = this.instagramService.getFollowsForUser(sourceUser.getUserId());
     } catch (InstagramApiException e) {
-      LOGGER.error("{}", e);
+      LOGGER.error("{}", e.getLocalizedMessage(), e);
       throw e;
     }
 
@@ -113,7 +113,7 @@ public class InstagramMinerTask {
         followUser = this.instagramService.getInstagramUserById(followsUser.get(i).getId());
         userRecentMedia = this.instagramService.getInstagramUserMedias(followUser.getId());
       } catch (InstagramApiException e) {
-        LOGGER.error("{}", e);
+        LOGGER.error("{}", e.getLocalizedMessage(), e);
         continue;
       }
 
@@ -129,7 +129,7 @@ public class InstagramMinerTask {
           continue;
         }
       } catch (Exception e) {
-        LOGGER.error("{}", e);
+        LOGGER.error("{}", e.getLocalizedMessage(), e);
         continue;
       }
 
@@ -139,7 +139,7 @@ public class InstagramMinerTask {
         userMedias = dataModelConversionUtils.createRawUserMedia(userRecentMedia);
         handleUserPersistance(followUser, userMedias);
       } catch (DataModelConverterException e) {
-        LOGGER.error("{}", e);
+        LOGGER.error("{}", e.getLocalizedMessage(), e);
         continue;
       }
     }
@@ -162,7 +162,7 @@ public class InstagramMinerTask {
       try {
         sourceUser = dataModelConversionUtils.createSourceUser(user, userMedias);
       } catch (DataModelConverterException e) {
-        LOGGER.error("{}", e);
+        LOGGER.error("{}", e.getLocalizedMessage(), e);
         throw e;
       }
       sourceUser.setCreatedTime(originalCreatedTime);
@@ -173,7 +173,7 @@ public class InstagramMinerTask {
       try {
         sourceUser = dataModelConversionUtils.createSourceUser(user, userMedias);
       } catch (DataModelConverterException e) {
-        LOGGER.error("{}", e);
+        LOGGER.error("{}", e.getLocalizedMessage(), e);
         throw e;
       }
 
