@@ -8,7 +8,6 @@ import com.andrewzurn.instagram.analyzer.service.CassandraService;
 import com.andrewzurn.instagram.analyzer.service.InstagramService;
 import com.andrewzurn.instagram.analyzer.utils.AnalyticsUtils;
 import com.andrewzurn.instagram.analyzer.utils.DataModelConversionUtils;
-import com.sola.instagram.exception.InstagramException;
 import com.sola.instagram.model.Media;
 import com.sola.instagram.model.User;
 import com.sola.instagram.util.PaginatedCollection;
@@ -18,7 +17,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -39,16 +37,16 @@ public class InstagramMinerTask {
   @Inject
   private DataModelConversionUtils dataModelConversionUtils;
 
-  public static final int ONE_HALF_MINUTE = 90000;
+  private static final int ONE_HALF_MINUTE = 90000;
 
   @Scheduled(fixedRate = ONE_HALF_MINUTE)
-  public void test() throws DataModelConverterException, InstagramApiException {
+  public void minePopularMedia() throws DataModelConverterException, InstagramApiException {
     if ( this.instagramService.isReady()) {
-      handleInstagramMining();
+      handlePopularMining();
     }
   }
 
-  private void handleInstagramMining() throws DataModelConverterException, InstagramApiException {
+  private void handlePopularMining() throws DataModelConverterException, InstagramApiException {
     List<Media> popularMedia = null;
     try {
       popularMedia = this.instagramService.getInstagramPopularMedia();
@@ -62,8 +60,8 @@ public class InstagramMinerTask {
       User user = null;
       PaginatedCollection<Media> userRecentMedia = null;
       try {
-        user = instagramService.getInstagramUser(media);
-        userRecentMedia = this.instagramService.getInstagramUserMedias(user);
+        user = instagramService.getInstagramUserById(media.getUser().getId());
+        userRecentMedia = this.instagramService.getInstagramUserMedias(user.getId());
       } catch (InstagramApiException e) {
         LOGGER.error("{}", e);
         throw e;
@@ -86,6 +84,11 @@ public class InstagramMinerTask {
         throw e;
       }
     }
+  }
+
+  private void handleFollowsForUsers() {
+    this.cassandraService.getUsers();
+
   }
 
   private SourceUser handleUserPersistance(User user, List<RawUserMedia> userMedias) throws DataModelConverterException {

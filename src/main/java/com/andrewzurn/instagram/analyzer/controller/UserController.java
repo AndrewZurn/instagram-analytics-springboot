@@ -16,7 +16,7 @@ public class UserController {
   @Inject
   private CassandraService cassandraService;
 
-  @RequestMapping(value = "/", method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
   public Iterable<SourceUser> all() {
     return this.cassandraService.getUsers();
   }

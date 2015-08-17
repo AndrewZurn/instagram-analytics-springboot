@@ -93,7 +93,7 @@ public class DataModelConversionUtils {
     Date updatedTime = new Date();
 
     return SourceUser.build(user, averagedEngagementRating, mostRecentMediaEngagementRating, trendingRating,
-        trending, locations, recentMediaIds, createdTime, updatedTime);
+        trending, locations, recentMediaIds, createdTime, updatedTime, false, null);
   }
 
   private List<RawUserMedia> convertRawUserMedia(PaginatedCollection<Media> userMedia) throws Exception {
@@ -105,10 +105,14 @@ public class DataModelConversionUtils {
   }
 
   private List<String> mapRecentMediaIds(List<RawUserMedia> userRecentMedia) {
-    return userRecentMedia.stream().map(RawUserMedia::getId).collect(Collectors.toList());
+    return userRecentMedia.stream()
+        .map(RawUserMedia::getId).collect(Collectors.toList());
   }
 
   private List<String> mapLocations(List<RawUserMedia> userRecentMedia) {
-    return userRecentMedia.stream().map(RawUserMedia::getLocation).collect(Collectors.toList());
+    return userRecentMedia.stream()
+        .filter(m -> !m.getLocation().equals(""))
+        .map(RawUserMedia::getLocation)
+        .collect(Collectors.toList());
   }
 }

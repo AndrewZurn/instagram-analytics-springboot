@@ -73,10 +73,17 @@ public class SourceUser {
   @Column("updated_time")
   private Date updatedTime;
 
+  @Column("has_been_follows_traversed")
+  private boolean hasBeenFollowsTraversed;
+
+  @Column("last_follows_traversal_time")
+  private Date lastFollowsTraversalTime;
+
   public SourceUser(int userId, String userName, String fullName, String bio, List<String> locations,
                     String website, int mediaCount, int follows, int followers,
                     List<String> recentMediaIds, double mostRecentEngagementRating, double averagedEngagementRating,
-                    boolean trending, double trendingValue, Date createdTime, Date updatedTime) {
+                    boolean trending, double trendingValue, Date createdTime, Date updatedTime,
+                    boolean hasBeenFollowsTraversed, Date lastFollowsTraversalTime) {
     this.userId = userId;
     this.userName = userName;
     this.fullName = fullName;
@@ -93,6 +100,8 @@ public class SourceUser {
     this.trendingValue = trendingValue;
     this.createdTime = createdTime;
     this.updatedTime = updatedTime;
+    this.hasBeenFollowsTraversed = hasBeenFollowsTraversed;
+    this.lastFollowsTraversalTime = lastFollowsTraversalTime;
   }
 
   public SourceUser() { }
@@ -161,12 +170,28 @@ public class SourceUser {
     return updatedTime;
   }
 
+  public boolean isHasBeenFollowsTraversed() {
+    return hasBeenFollowsTraversed;
+  }
+
+  public Date getLastFollowsTraversalTime() {
+    return lastFollowsTraversalTime;
+  }
+
   public void setCreatedTime(Date createdTime) {
     this.createdTime = createdTime;
 }
 
   public void setUpdatedTime(Date updatedTime) {
     this.updatedTime = updatedTime;
+  }
+
+  public void setLastFollowsTraversalTime(Date lastFollowsTraversalTime) {
+    this.lastFollowsTraversalTime = lastFollowsTraversalTime;
+  }
+
+  public void setHasBeenFollowsTraversed(boolean hasBeenFollowsTraversed) {
+    this.hasBeenFollowsTraversed = hasBeenFollowsTraversed;
   }
 
   @Override
@@ -188,6 +213,8 @@ public class SourceUser {
         ", trendingValue=" + trendingValue +
         ", createdTime=" + createdTime +
         ", updatedTime=" + updatedTime +
+        ", hasBeenFollowsTraversed=" + hasBeenFollowsTraversed +
+        ", lastFollowsTraversalTime=" + lastFollowsTraversalTime +
         '}';
   }
 
@@ -232,7 +259,8 @@ public class SourceUser {
    */
   public static SourceUser build(User user, float averagedEngagementRating, float mostRecentEngagementRating,
                                  float trendingValue, boolean trending, List<String> locations,
-                                 List<String> recentMediaIds, Date createdTime, Date updatedTime) throws Exception {
+                                 List<String> recentMediaIds, Date createdTime, Date updatedTime,
+                                 boolean hasBeenFollowsTraversed, Date lastFollowsTraversalTime) throws Exception {
     String fullName = "";
     try {
       fullName = user.getFullName().replaceAll("[\t\r\n]", "");
@@ -251,7 +279,8 @@ public class SourceUser {
     try {
       return new SourceUser(user.getId(), user.getUserName(), fullName, bio, locations, website, user.getMediaCount(),
           user.getFollowingCount(), user.getFollowerCount(), recentMediaIds, mostRecentEngagementRating,
-          averagedEngagementRating, trending, trendingValue, createdTime, updatedTime);
+          averagedEngagementRating, trending, trendingValue, createdTime, updatedTime,
+          hasBeenFollowsTraversed, lastFollowsTraversalTime);
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception("ERROR in building the SourceUser object.\n" + e);

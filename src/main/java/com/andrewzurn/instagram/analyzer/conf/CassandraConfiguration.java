@@ -35,7 +35,7 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
   @Bean
   @Override
-  public CassandraMappingContext cassandraMapping() throws  ClassNotFoundException {
+  public CassandraMappingContext cassandraMapping() throws ClassNotFoundException {
     return new BasicCassandraMappingContext();
   }
 

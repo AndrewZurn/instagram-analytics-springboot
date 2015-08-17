@@ -84,27 +84,25 @@ public class InstagramService {
     }
   }
 
-  public User getInstagramUser(Media media) throws InstagramApiException {
-    User user = null;
-    try {
-      // get the raw instagram models
-      user = getInstagramUserById(media.getUser().getId());
-    } catch (Exception e) {
-      throw new InstagramApiException("ERROR while retrieving the user with id: "
-          + media.getUser().getId() + ".\n" + e);
-    }
-    return user;
-  }
-
-  public PaginatedCollection<Media> getInstagramUserMedias(User user) throws InstagramApiException {
+  public PaginatedCollection<Media> getInstagramUserMedias(int userId) throws InstagramApiException {
     PaginatedCollection<Media> userRecentMedia = null;
     try {
       // get the raw instagram models
-      userRecentMedia = this.instagramSession.getRecentPublishedMedia(user.getId());
+      userRecentMedia = this.instagramSession.getRecentPublishedMedia(userId);
     } catch (Exception e){
       throw new InstagramApiException("ERROR while retrieving the user recent media with user_id: "
-          + user.getId() + ".\n" + e);
+          + userId + ".\n" + e);
     }
     return userRecentMedia;
+  }
+
+  public void getFollowsForUser(int userId) throws InstagramApiException {
+    PaginatedCollection<User> followsForUser = null;
+    try {
+      followsForUser = this.instagramSession.getFollows(userId);
+    } catch (Exception e) {
+      throw new InstagramApiException("ERROR while retrieving the follow users for user_id: "
+          + userId + "\n." + e);
+    }
   }
 }
