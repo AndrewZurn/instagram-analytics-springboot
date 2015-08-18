@@ -1,3 +1,4 @@
 use instagram_prototype_raw;
 alter table source_user_entity add has_been_follows_traversed boolean;
+CREATE INDEX index_has_been_follows_traversed ON source_user_entity (has_been_follows_traversed)
 alter table source_user_entity add last_follows_traversal_time timestamp;

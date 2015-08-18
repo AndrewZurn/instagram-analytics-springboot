@@ -5,7 +5,6 @@ import com.andrewzurn.instagram.analyzer.exception.InstagramApiException;
 import com.andrewzurn.instagram.analyzer.model.RawUserMedia;
 import com.andrewzurn.instagram.analyzer.model.SourceUser;
 import com.andrewzurn.instagram.analyzer.service.InstagramService;
-import com.andrewzurn.instagram.analyzer.tasks.InstagramMinerTask;
 import com.sola.instagram.model.Media;
 import com.sola.instagram.model.User;
 import com.sola.instagram.util.PaginatedCollection;

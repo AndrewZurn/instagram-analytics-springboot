@@ -117,19 +117,7 @@ public class InstagramMinerTask {
         continue;
       }
 
-      // if user/media is not detected as english, or we already have this user
-      if ( !analyticsUtils.determineLanguage(followUser, userRecentMedia.get(0))) {
-        LOGGER.info("User: {} with id: {} disqualified for language detection.",
-            followUser.getUserName(), followUser.getId());
-        continue;
-      } else try {
-        if ( followUser.getFollowerCount() < FIFTY_THOUSAND) {
-          LOGGER.info("User: {} with id: {} disqualified for low follower count.",
-              followUser.getUserName(), followUser.getId());
-          continue;
-        }
-      } catch (Exception e) {
-        LOGGER.error("{}", e.getLocalizedMessage(), e);
+      if (disqualifyUser(followUser, userRecentMedia)) {
         continue;
       }
 
@@ -143,6 +131,28 @@ public class InstagramMinerTask {
         continue;
       }
     }
+    updateSourceUserForFollowsTraversed(sourceUser);
+  }
+
+  private boolean disqualifyUser(User user, PaginatedCollection<Media> userRecentMedia) {
+    // if user/media is not detected as english, or we already have this user
+    try {
+      if (!analyticsUtils.determineLanguage(user, userRecentMedia.get(0))) {
+        LOGGER.info("User: {} with id: {} disqualified for language detection.",
+            user.getUserName(), user.getId());
+        return true;
+      } else if (user.getFollowerCount() < FIFTY_THOUSAND) {
+        LOGGER.info("User: {} with id: {} disqualified for low follower count.",
+            user.getUserName(), user.getId());
+        return true;
+      }
+    } catch (Exception e) { // could also be an array index out of bounds exception from userRecentMedia.get(0)
+      return true;
+    }
+    return false;
+  }
+
+  private void updateSourceUserForFollowsTraversed(SourceUser sourceUser) {
     // mark that we've traversed this user and gathered users they follow
     sourceUser.setHasBeenFollowsTraversed(true);
     sourceUser.setLastFollowsTraversalTime(new Date());
