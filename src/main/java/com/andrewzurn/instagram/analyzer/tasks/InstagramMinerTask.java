@@ -41,14 +41,14 @@ public class InstagramMinerTask {
   private static final int ONE_HALF_MINUTE = 90000;
   private static final int ONE_AND_ONE_QUARTER_MINUTE = 75000;
 
-  //@Scheduled(fixedRate = ONE_HALF_MINUTE)
+  @Scheduled(fixedRate = ONE_HALF_MINUTE)
   public void minePopularMedia() throws DataModelConverterException, InstagramApiException {
     if ( this.instagramService.isReady()) {
       handlePopularMining();
     }
   }
 
-  @Scheduled(fixedRate = ONE_AND_ONE_QUARTER_MINUTE)
+  //@Scheduled(fixedRate = ONE_AND_ONE_QUARTER_MINUTE)
   public void mineUserFollows() throws DataModelConverterException, InstagramApiException {
     if ( this.instagramService.isReady()) {
       handleFollowsForUsers();
