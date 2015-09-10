@@ -221,23 +221,23 @@ public class SourceUser {
   }
 
   public static String tsvHeader() {
-    return "USER_ID" + "\t" +
-        "USER_NAME" + "\t" +
-        "FULL_NAME" + "\t" +
-        "BIO" + "\t" +
-        "LOCATIONS" + "\t" +
-        "WEBSITE" + "\t" +
-        "MEDIA_COUNT" + "\t" +
-        "FOLLOWS"  + "\t" +
-        "FOLLOWERS" + "\t" +
-        "RECENT_MEDIA_IDS" + "\t" +
-        "MOST_RECENT_ENGAGEMENT_RATING" + "\t" +
-        "AVG_ENGAGEMENT_RATING" + "\t" +
-        "TRENDING" + "\t" +
-        "TRENDING_VALUE" + "\t" +
-        "CREATED_TIME" + "\t" +
-        "UPDATED_TIME" + "\t" +
-        "HAS_BEEN_FOLLOWS_TRAVERSED" + "\t" +
+    return "USER_ID" + "||" +
+        "USER_NAME" + "||" +
+        "FULL_NAME" + "||" +
+        "BIO" + "||" +
+        "LOCATIONS" + "||" +
+        "WEBSITE" + "||" +
+        "MEDIA_COUNT" + "||" +
+        "FOLLOWS"  + "||" +
+        "FOLLOWERS" + "||" +
+        "RECENT_MEDIA_IDS" + "||" +
+        "MOST_RECENT_ENGAGEMENT_RATING" + "||" +
+        "AVG_ENGAGEMENT_RATING" + "||" +
+        "TRENDING" + "||" +
+        "TRENDING_VALUE" + "||" +
+        "CREATED_TIME" + "||" +
+        "UPDATED_TIME" + "||" +
+        "HAS_BEEN_FOLLOWS_TRAVERSED" + "||" +
         "LAST_FOLLOWS_TRAVERSED_TIME" + "\n";
   }
 
@@ -256,23 +256,23 @@ public class SourceUser {
     String biog = bio.replaceAll("[\\t\\r\\n]", "");
     String websiteUrl = website.replaceAll("[\\t\\r\\n]", "");
 
-    return userId + "\t" +
-        username + "\t" +
-        fullname + "\t" +
-        biog + "\t" +
-        parsedLocations + "\t" +
-        websiteUrl + "\t" +
-        mediaCount + "\t" +
-        follows  + "\t" +
-        followers + "\t" +
-        recentMediaIds + "\t" +
-        mostRecentEngagementRating + "\t" +
-        averagedEngagementRating + "\t" +
-        trending + "\t" +
-        trendingValue + "\t" +
-        createdTime + "\t" +
-        updatedTime + "\t" +
-        hasBeenFollowsTraversed + "\t" +
+    return userId + "||" +
+        username + "||" +
+        fullname + "||" +
+        biog + "||" +
+        parsedLocations + "||" +
+        websiteUrl + "||" +
+        mediaCount + "||" +
+        follows  + "||" +
+        followers + "||" +
+        recentMediaIds + "||" +
+        mostRecentEngagementRating + "||" +
+        averagedEngagementRating + "||" +
+        trending + "||" +
+        trendingValue + "||" +
+        createdTime + "||" +
+        updatedTime + "||" +
+        hasBeenFollowsTraversed + "||" +
         lastFollowsTraversalTime + "\n";
   }
 
