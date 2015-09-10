@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -53,6 +54,43 @@ public class UserController {
     response.setContentType("application/csv");
     response.getWriter().write(returnString);
     response.flushBuffer();
+  }
+
+  @RequestMapping(value = "/clean", method = RequestMethod.GET)
+  public String clean() {
+    Iterable<SourceUser> users = this.cassandraService.getUsers();
+    for (SourceUser user : users) {
+      user.setBio(user.getBio().replaceAll("\n", ""));
+      user.setWebsite(user.getWebsite().replaceAll("\n", ""));
+      user.setUserName(user.getUserName().replaceAll("\n", ""));
+      user.setFullName(user.getFullName().replaceAll("\n", ""));
+      user.setBio(user.getBio().replaceAll("\t", ""));
+      user.setWebsite(user.getWebsite().replaceAll("\t", ""));
+      user.setUserName(user.getUserName().replaceAll("\t", ""));
+      user.setFullName(user.getFullName().replaceAll("\t", ""));
+      user.setBio(user.getBio().replaceAll("\r", ""));
+      user.setWebsite(user.getWebsite().replaceAll("\r", ""));
+      user.setUserName(user.getUserName().replaceAll("\r", ""));
+      user.setFullName(user.getFullName().replaceAll("\r", ""));
+      user.setBio(user.getBio().replaceAll("|", ""));
+      user.setWebsite(user.getWebsite().replaceAll("|", ""));
+      user.setUserName(user.getUserName().replaceAll("|", ""));
+      user.setFullName(user.getFullName().replaceAll("|", ""));
+      List<String> locations = new ArrayList();
+      try {
+        for (String loc : user.getLocations()) {
+          if (!loc.equals("")) {
+            locations.add(loc.replaceAll("\n", ""));
+            locations.add(loc.replaceAll("\r", ""));
+            locations.add(loc.replaceAll("\t", ""));
+            locations.add(loc.replaceAll("|", ""));
+          }
+        }
+      } catch (NullPointerException ne) { }
+      user.setLocations(locations);
+      cassandraService.saveUser(user);
+    }
+    return "done";
   }
 
   @RequestMapping(value = "/traversed/single", method = RequestMethod.GET)

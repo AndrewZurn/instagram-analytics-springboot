@@ -180,20 +180,76 @@ public class SourceUser {
     return lastFollowsTraversalTime;
   }
 
+  public void setUserId(Integer userId) {
+    this.userId = userId;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
+  }
+
+  public void setBio(String bio) {
+    this.bio = bio;
+  }
+
+  public void setLocations(List<String> locations) {
+    this.locations = locations;
+  }
+
+  public void setWebsite(String website) {
+    this.website = website;
+  }
+
+  public void setMediaCount(int mediaCount) {
+    this.mediaCount = mediaCount;
+  }
+
+  public void setFollows(int follows) {
+    this.follows = follows;
+  }
+
+  public void setFollowers(int followers) {
+    this.followers = followers;
+  }
+
+  public void setRecentMediaIds(List<String> recentMediaIds) {
+    this.recentMediaIds = recentMediaIds;
+  }
+
+  public void setMostRecentEngagementRating(double mostRecentEngagementRating) {
+    this.mostRecentEngagementRating = mostRecentEngagementRating;
+  }
+
+  public void setAveragedEngagementRating(double averagedEngagementRating) {
+    this.averagedEngagementRating = averagedEngagementRating;
+  }
+
+  public void setTrending(boolean trending) {
+    this.trending = trending;
+  }
+
+  public void setTrendingValue(double trendingValue) {
+    this.trendingValue = trendingValue;
+  }
+
   public void setCreatedTime(Date createdTime) {
     this.createdTime = createdTime;
-}
+  }
 
   public void setUpdatedTime(Date updatedTime) {
     this.updatedTime = updatedTime;
   }
 
-  public void setLastFollowsTraversalTime(Date lastFollowsTraversalTime) {
-    this.lastFollowsTraversalTime = lastFollowsTraversalTime;
-  }
-
   public void setHasBeenFollowsTraversed(boolean hasBeenFollowsTraversed) {
     this.hasBeenFollowsTraversed = hasBeenFollowsTraversed;
+  }
+
+  public void setLastFollowsTraversalTime(Date lastFollowsTraversalTime) {
+    this.lastFollowsTraversalTime = lastFollowsTraversalTime;
   }
 
   @Override
@@ -221,23 +277,23 @@ public class SourceUser {
   }
 
   public static String tsvHeader() {
-    return "USER_ID" + "$|" +
-        "USER_NAME" + "$|" +
-        "FULL_NAME" + "$|" +
-        "BIO" + "$|" +
-        "LOCATIONS" + "$|" +
-        "WEBSITE" + "$|" +
-        "MEDIA_COUNT" + "$|" +
-        "FOLLOWS"  + "$|" +
-        "FOLLOWERS" + "$|" +
-        "RECENT_MEDIA_IDS" + "$|" +
-        "MOST_RECENT_ENGAGEMENT_RATING" + "$|" +
-        "AVG_ENGAGEMENT_RATING" + "$|" +
-        "TRENDING" + "$|" +
-        "TRENDING_VALUE" + "$|" +
-        "CREATED_TIME" + "$|" +
-        "UPDATED_TIME" + "$|" +
-        "HAS_BEEN_FOLLOWS_TRAVERSED" + "$|" +
+    return "USER_ID" + "\t" +
+        "USER_NAME" + "\t" +
+        "FULL_NAME" + "\t" +
+        "BIO" + "\t" +
+        "LOCATIONS" + "\t" +
+        "WEBSITE" + "\t" +
+        "MEDIA_COUNT" + "\t" +
+        "FOLLOWS"  + "\t" +
+        "FOLLOWERS" + "\t" +
+        "RECENT_MEDIA_IDS" + "\t" +
+        "MOST_RECENT_ENGAGEMENT_RATING" + "\t" +
+        "AVG_ENGAGEMENT_RATING" + "\t" +
+        "TRENDING" + "\t" +
+        "TRENDING_VALUE" + "\t" +
+        "CREATED_TIME" + "\t" +
+        "UPDATED_TIME" + "\t" +
+        "HAS_BEEN_FOLLOWS_TRAVERSED" + "\t" +
         "LAST_FOLLOWS_TRAVERSED_TIME" + "\n";
   }
 
@@ -256,23 +312,23 @@ public class SourceUser {
     String biog = bio.replaceAll("[\\t\\r\\n]", "");
     String websiteUrl = website.replaceAll("[\\t\\r\\n]", "");
 
-    return userId + "$|" +
-        username + "$|" +
-        fullname + "$|" +
-        biog + "$|" +
-        parsedLocations + "$|" +
-        websiteUrl + "$|" +
-        mediaCount + "$|" +
-        follows  + "$|" +
-        followers + "$|" +
-        recentMediaIds + "$|" +
-        mostRecentEngagementRating + "$|" +
-        averagedEngagementRating + "$|" +
-        trending + "$|" +
-        trendingValue + "$|" +
-        createdTime + "$|" +
-        updatedTime + "$|" +
-        hasBeenFollowsTraversed + "$|" +
+    return userId + "\t" +
+        username + "\t" +
+        fullname + "\t" +
+        biog + "\t" +
+        parsedLocations + "\t" +
+        websiteUrl + "\t" +
+        mediaCount + "\t" +
+        follows  + "\t" +
+        followers + "\t" +
+        recentMediaIds + "\t" +
+        mostRecentEngagementRating + "\t" +
+        averagedEngagementRating + "\t" +
+        trending + "\t" +
+        trendingValue + "\t" +
+        createdTime + "\t" +
+        updatedTime + "\t" +
+        hasBeenFollowsTraversed + "\t" +
         lastFollowsTraversalTime + "\n";
   }
 
