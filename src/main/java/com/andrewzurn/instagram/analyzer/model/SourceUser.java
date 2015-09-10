@@ -6,9 +6,11 @@ import org.springframework.data.cassandra.mapping.Indexed;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
+import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by andrew on 8/10/15.
@@ -216,6 +218,57 @@ public class SourceUser {
         ", hasBeenFollowsTraversed=" + hasBeenFollowsTraversed +
         ", lastFollowsTraversalTime=" + lastFollowsTraversalTime +
         '}';
+  }
+
+  public static String tsvHeader() {
+    return "USER_ID" + "\t" +
+        "USER_NAME" + "\t" +
+        "FULL_NAME" + "\t" +
+        "BIO" + "\t" +
+        "LOCATIONS" + "\t" +
+        "WEBSITE" + "\t" +
+        "MEDIA_COUNT" + "\t" +
+        "FOLLOWS"  + "\t" +
+        "FOLLOWERS" + "\t" +
+        "RECENT_MEDIA_IDS" + "\t" +
+        "MOST_RECENT_ENGAGEMENT_RATING" + "\t" +
+        "AVG_ENGAGEMENT_RATING" + "\t" +
+        "TRENDING" + "\t" +
+        "TRENDING_VALUE" + "\t" +
+        "CREATED_TIME" + "\t" +
+        "UPDATED_TIME" + "\t" +
+        "HAS_BEEN_FOLLOWS_TRAVERSED" + "\t" +
+        "LAST_FOLLOWS_TRAVERSED_TIME" + "\n";
+  }
+
+  public String tsvRepr() {
+    List<String> parsedLocations = new ArrayList();
+    try {
+      for (String loc : locations) {
+        if (!loc.equals("")) {
+          parsedLocations.add(loc.replaceAll("[\t\r\n]", ""));
+        }
+      }
+    } catch (NullPointerException ne) { }
+
+    return userId + "\t" +
+        userName.replaceAll("[\t\r\n]", "") + "\t" +
+        fullName.replaceAll("[\t\r\n]", "") + "\t" +
+        bio.replaceAll("[\t\r\n]", "") + "\t" +
+        parsedLocations + "\t" +
+        website.replaceAll("[\t\r\n]", "") + "\t" +
+        mediaCount + "\t" +
+        follows  + "\t" +
+        followers + "\t" +
+        recentMediaIds + "\t" +
+        mostRecentEngagementRating + "\t" +
+        averagedEngagementRating + "\t" +
+        trending + "\t" +
+        trendingValue + "\t" +
+        createdTime + "\t" +
+        updatedTime + "\t" +
+        hasBeenFollowsTraversed + "\t" +
+        lastFollowsTraversalTime + "\n";
   }
 
   @Override

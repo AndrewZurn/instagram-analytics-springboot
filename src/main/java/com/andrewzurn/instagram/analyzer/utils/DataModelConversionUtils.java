@@ -43,7 +43,7 @@ public class DataModelConversionUtils {
   }
 
   public SourceUser createSourceUser(User user, List<RawUserMedia> userMedias) throws DataModelConverterException {
-    SourceUser sourceUser = null;
+    SourceUser sourceUser;
     try {
       sourceUser = this.convertToSourceUser(user, userMedias);
     } catch (Exception e) {
