@@ -246,15 +246,15 @@ public class SourceUser {
     try {
       for (String loc : locations) {
         if (!loc.equals("")) {
-          parsedLocations.add(loc.replaceAll("[\t\r\n]", ""));
+          parsedLocations.add(loc.replaceAll("[\\t\\r\\n]", ""));
         }
       }
     } catch (NullPointerException ne) { }
 
-    String username = userName.replaceAll("[\t\r\n]", "");
-    String fullname = fullName.replaceAll("[\t\r\n]", "");
-    String biog = bio.replaceAll("[\t\r\n]", "");
-    String websiteUrl = website.replaceAll("[\t\r\n]", "");
+    String username = userName.replaceAll("[\\t\\r\\n]", "");
+    String fullname = fullName.replaceAll("[\\t\\r\\n]", "");
+    String biog = bio.replaceAll("[\\t\\r\\n]", "");
+    String websiteUrl = website.replaceAll("[\\t\\r\\n]", "");
 
     return userId + "\t" +
         username + "\t" +
@@ -321,17 +321,17 @@ public class SourceUser {
                                  boolean hasBeenFollowsTraversed, Date lastFollowsTraversalTime) throws Exception {
     String fullName = "";
     try {
-      fullName = user.getFullName().replaceAll("[\t\r\n]", "");
+      fullName = user.getFullName().replaceAll("[\\t\\r\\n]", "");
     } catch (NullPointerException ne) { }
 
     String bio = "";
     try {
-      bio = user.getBio().replaceAll("[\t\r\n]", "");
+      bio = user.getBio().replaceAll("[\\t\\r\\n]", "");
     } catch (NullPointerException ne) { }
 
     String website = "";
     try {
-      website = user.getWebsite().replaceAll("[\t\r\n]", "");
+      website = user.getWebsite().replaceAll("[\\t\\r\\n]", "");
     } catch (NullPointerException ne) { }
 
     try {
