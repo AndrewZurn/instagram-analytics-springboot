@@ -50,8 +50,8 @@ public class UserController {
     for (SourceUser user : users) {
       returnString += user.tsvRepr();
     }
-    response.setHeader("Content-Disposition", "attachment; filename=user_export.csv");
-    response.setContentType("application/csv");
+    response.setHeader("Content-Disposition", "attachment; filename=user_export.txt");
+    response.setContentType("application/txt");
     response.getWriter().write(returnString);
     response.flushBuffer();
   }
