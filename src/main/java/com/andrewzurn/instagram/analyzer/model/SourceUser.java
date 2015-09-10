@@ -251,12 +251,17 @@ public class SourceUser {
       }
     } catch (NullPointerException ne) { }
 
+    String username = userName.replaceAll("[\t\r\n]", "");
+    String fullname = fullName.replaceAll("[\t\r\n]", "");
+    String biog = bio.replaceAll("[\t\r\n]", "");
+    String websiteUrl = website.replaceAll("[\t\r\n]", "");
+
     return userId + "\t" +
-        userName.replaceAll("[\t\r\n]", "") + "\t" +
-        fullName.replaceAll("[\t\r\n]", "") + "\t" +
-        bio.replaceAll("[\t\r\n]", "") + "\t" +
+        username + "\t" +
+        fullname + "\t" +
+        biog + "\t" +
         parsedLocations + "\t" +
-        website.replaceAll("[\t\r\n]", "") + "\t" +
+        websiteUrl + "\t" +
         mediaCount + "\t" +
         follows  + "\t" +
         followers + "\t" +
